@@ -8,7 +8,6 @@ hcurr = (0,0)
 
 # Part 1 Initialization
 positions1 = set()
-tcurr = (0,0)
 
 # Part 2 Initialization
 positions2 = set()
@@ -48,14 +47,10 @@ for line in sys.stdin:
         hcurr=get_next(dir,hcurr)
         dist -=1
 
-        #Part 1
-        tcurr = get_tail(hcurr,tcurr)
-        positions1.add(tcurr)
-          
-        #Part 2
         tails[0] = get_tail(hcurr,tails[0])
         for i in range(1,9):
             tails[i] = get_tail(tails[i-1],tails[i])
+        positions1.add(tails[0])
         positions2.add(tails[8])
         
        
