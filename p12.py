@@ -32,9 +32,6 @@ grid[endpoint[0]][endpoint[1]] = 'z'
 
 #print(start,endpoint)
 
-heights = [[ord(grid[i][j]) - ord('a')+1 for j in range(0,cols)] for i in range(0,rows)]
-#print(heights)
-
 
 def getShortestPath():
     global toProcess
