@@ -7,30 +7,23 @@ grid = set()
 
 def drawPath(x1,y1, x2,y2,char):
     if x1 == x2:
-       if y1 > y2:
-           step = -1
-       else:
-           step = 1
+       step = -1 if y1 > y2 else 1
        for i in range(y1,y2+step,step):
            grid.add((x1,i))
     elif y1 == y2:
-       if x1 > x2:
-           step = -1
-       else:
-           step = 1
+       step = -1 if x1 > x2 else 1
        for i in range(x1,x2+step,step):
            grid.add((i,y1))
 
 def doPart(part):
-    x, y = (500, 0)   
     blocked = False
     while not blocked:
-        nx, ny = x, y
+        nx, ny = (500, 0)
         while True:
-            if part == 1 and not any(i == nx and j >= ny for i,j in grid):
+            if part== 1 and (nx <= mn or ny >= mx):
                 blocked = True
                 break
-            if (part == 2 and ny+1 < mx) or part == 1:
+            if (part == 2 and ny < mx) or part == 1:
                 if (nx, ny+1) not in grid:
                     ny += 1;
                     continue
@@ -42,7 +35,7 @@ def doPart(part):
                     nx += 1;
                     ny += 1;
                     continue
-            if part == 2 and ny == y:
+            if not ny:
                 blocked = True
                 break
             grid.add((nx, ny))
@@ -61,11 +54,14 @@ for line in sys.stdin:
        drawPath(int(first[0]),int(first[1]),int(nxt[0]),int(nxt[1]),'#')
        first = nxt
 
+mx = max([y for (x,y) in grid])
+mn = min([x for (x,y) in grid])
+
 gridorig = grid.copy()
 grido = set()
 doPart(1)
 
-mx = max([y for (x,y) in grid]) + 2
+mx +=1
 grid = gridorig.copy()
 grido = set()
 grido.add((500,0))
