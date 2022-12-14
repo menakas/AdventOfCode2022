@@ -1,3 +1,6 @@
+# https://adventofcode.com/2022/day/13
+# Created by: Menaka S. 13 Dec 2022
+
 import sys
 import functools
 import ast

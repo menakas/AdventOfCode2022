@@ -1,3 +1,6 @@
+# https://adventofcode.com/2022/day/14
+# Created by: Menaka S. 14 Dec 2022
+
 import sys
 
 grid = set()
