@@ -5,8 +5,11 @@ import sys
 
 grid = set()
 
-seen = dict()
-hts = dict()
+pattern = []
+htoffset = 0
+offset = 359 #30 for sample
+multiple = 1715 #35 for sample
+#pattern = '02340121201212013200133401230113220'
 
 shapes = [ 
               [(2,0),(3,0),(4,0),(5,0)],       # -
@@ -55,31 +58,14 @@ def push_rock(rock,push):
 def start_rock(ind,mxheight):
    return [(add_tup(item,(0,mxheight+4))) for item in shapes[ind]]
   
-def calc_height(rocks,ht,oldrocks,oldht,mxrocks):
-    global hts
-
-    mxrocks -= oldrocks
-    deltarocks = rocks - oldrocks
-    deltaht = ht - oldht
-    q = mxrocks//deltarocks
-    r = mxrocks%deltarocks
-    return (q* deltaht + hts[oldrocks+r]) + 1
-
-def signature(ht):
-    sign = []
-    for x in range(7):
-        for y in range(ht-30,ht):
-            if (x,y) in grid:
-                sign.append((x,ht-y))
-    return str(sign)
-  
-def do_part(lst):
+def do_part1(lst):
     global htoffset,offset,multiple
-
     rocks = 0
     mxheight = -1
     cshape = 0
     cjet = -1
+
+    #lt = -1 #for finding pattern in Part 2 
 
     rock=start_rock(cshape,mxheight)
     while True:
@@ -89,23 +75,40 @@ def do_part(lst):
            rocks += 1
            ht = get_max_height()
 
-           sign = (cshape, cjet, signature(ht))
-           if sign in seen: # and ht >2022:
-               oldht,oldrocks = seen[sign]
-               return(
-                calc_height(rocks,ht,oldrocks,oldht,2022),
-                calc_height(rocks,ht,oldrocks,oldht,1000000000000)
-              )
+           # Part 1 
+           if rocks == 2022:
+               ht2022 = ht
 
-           if sign not in seen:
-               seen[sign] = (ht,rocks)
-               hts[rocks] = ht
+           # Part 2
+           # for finding pattern in Part 2
+           #print(ht,lt,ht-lt)
+           #lt = ht
+
+           if rocks == offset:
+               htoffset = ht
+           if offset < rocks <=(multiple+offset):
+              pattern.append(ht-htoffset)
+
+           if rocks >= offset+ multiple:
+               break
 
            cshape = get_next_index(shapes,cshape)
            mxheight = get_max_height()
            rock=start_rock(cshape,mxheight)
+
+    return ht2022+1
   
+#Method 1 manual
+def do_part2(): 
+    rocks = 1000000000000
+    rocks -= offset
+
+    qrocks = rocks//multiple
+    rrocks = rocks%multiple 
+
+    return (htoffset + (qrocks * pattern[-1]) + pattern[rrocks])
+
+
 lst = parse_input()
-part1,part2 = do_part(lst)
-print("Part 1:",part1)
-print("Part 2:",part2)
+print("Part 1:",do_part1(lst))
+print("Part 2:",do_part2())
